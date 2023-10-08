@@ -7,9 +7,9 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.purple,
+      backgroundColor: Colors.greenAccent,
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 231, 157, 182),
+        backgroundColor: Color.fromARGB(255, 113, 196, 234),
         title: Text('Calculator'),
       ),
       body: CalculatorView(),
