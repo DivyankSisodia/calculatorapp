@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -16,12 +18,65 @@ class _CalculatorViewState extends State<CalculatorView> {
   final displayOneController = TextEditingController();
   final displayTwoController = TextEditingController();
 
+  late final AppLifecycleListener _listener;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     displayOneController.text = x.toString();
     displayTwoController.text = y.toString();
+
+    _listener = AppLifecycleListener(
+      onResume: _onResume,
+      onPause: _onPause,
+      onDetach: _onDetach,
+      onHide: _onHide,
+      onShow: _onShow,
+      onInactive: _onInactive,
+      onRestart: _onRestart,
+      onStateChange: _onStateChange,
+    );
+  }
+
+  void _onShow() {
+    print('onShow');
+  }
+
+  void _onRestart() {
+    print('onRestart');
+  }
+
+  void _onInactive() {
+    print('inactive rn');
+  }
+
+  void _onHide() {
+    print('Hiding rn');
+  }
+
+  void _onDetach() {
+    print('Detaching rn');
+  }
+
+  void _onPause() {
+    print('Pausing rn');
+  }
+
+  void _onResume() {
+    print('Resuming rn');
+  }
+
+  void _onStateChange(AppLifecycleState state) {
+    print('State changing rn : $state');
+  }
+
+  @override
+  void dispose() {
+
+    super.dispose();
+    displayOneController.dispose();
+    displayTwoController.dispose();
+    _listener.dispose();
   }
 
   @override
@@ -40,8 +95,8 @@ class _CalculatorViewState extends State<CalculatorView> {
           const SizedBox(
             height: 30,
           ),
-          const Text("0",
-              style: TextStyle(
+          Text(z.toString(),
+              style: const TextStyle(
                   fontSize: 50,
                   fontWeight: FontWeight.bold,
                   color: Color.fromARGB(255, 123, 119, 119))),
@@ -50,29 +105,63 @@ class _CalculatorViewState extends State<CalculatorView> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               FloatingActionButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      z = num.tryParse(displayOneController.text)! +
+                          num.tryParse(displayTwoController.text)!;
+                    });
+                  },
                   backgroundColor: const Color.fromARGB(255, 160, 184, 244),
                   child: const Icon(CupertinoIcons.add)),
               FloatingActionButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      z = num.tryParse(displayOneController.text)! -
+                          num.tryParse(displayTwoController.text)!;
+                    });
+                  },
                   backgroundColor: const Color.fromARGB(255, 160, 184, 244),
                   child: const Icon(CupertinoIcons.minus)),
               FloatingActionButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      z = num.tryParse(displayOneController.text)! *
+                          num.tryParse(displayTwoController.text)!;
+                    });
+                  },
                   backgroundColor: const Color.fromARGB(255, 160, 184, 244),
                   child: const Icon(CupertinoIcons.multiply)),
               FloatingActionButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      z = num.tryParse(displayOneController.text)! %
+                          num.tryParse(displayTwoController.text)!;
+                    });
+                  },
                   backgroundColor: const Color.fromARGB(255, 160, 184, 244),
                   child: const Icon(CupertinoIcons.divide)),
             ],
           ),
-          ButtonTheme(
-              minWidth: 300,
-              child: FloatingActionButton(
-                onPressed: () {},
-                child: const Text('clear'),
-              ))
+          const SizedBox(
+            height: 40,
+          ),
+          FloatingActionButton.extended(
+            onPressed: () {
+              setState(() {
+                x = 0;
+                y = 0;
+                z = 0;
+                displayOneController.clear();
+                displayTwoController.clear();
+              });
+            },
+            backgroundColor: const Color.fromARGB(255, 160, 184, 244),
+            icon: const Icon(CupertinoIcons.delete),
+            label: const Text('Clear'),
+          ),
+          const SizedBox(
+            height: 30,
+          )
         ],
       ),
     );
@@ -98,14 +187,17 @@ class CalculatorDisplayOne extends StatelessWidget {
       autofocus: true,
       decoration: InputDecoration(
         focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.black, width: 3.0),
+            borderSide:
+                BorderSide(color: Color.fromARGB(255, 5, 205, 245), width: 3.0),
             borderRadius: BorderRadius.all(Radius.circular(15.0))),
         border: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.black, width: 3.0),
             borderRadius: BorderRadius.all(Radius.circular(15.0))),
         hintText: hint,
         hintStyle: const TextStyle(
-            color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+            color: Color.fromARGB(255, 0, 0, 0),
+            fontSize: 16,
+            fontWeight: FontWeight.bold),
       ),
       textAlign: TextAlign.center,
     );

@@ -9,10 +9,10 @@ class HomeView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.greenAccent,
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 113, 196, 234),
-        title: Text('Calculator'),
+        backgroundColor: const Color.fromARGB(255, 113, 196, 234),
+        title:const Text('Calculator'),
       ),
-      body: CalculatorView(),
+      body: const CalculatorView(),
     );
   }
 }
